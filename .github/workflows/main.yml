@@ -30,9 +30,14 @@ jobs:
       - name: Install Capacitor
         run: |
           npm install @capacitor/core @capacitor/cli @capacitor/android --legacy-peer-deps
-          if [ ! -f capacitor.config.ts ] && [ ! -f capacitor.config.json ]; then
-            npx cap init OpenWorldDrive com.openworlddrive.app --web-dir=dist
-          fi
+          rm -f capacitor.config.ts
+          cat > capacitor.config.json << 'EOF'
+          {
+            "appId": "com.openworlddrive.app",
+            "appName": "OpenWorldDrive",
+            "webDir": "dist"
+          }
+          EOF
 
       - name: Add Android platform
         run: |
@@ -42,6 +47,21 @@ jobs:
 
       - name: Sync Android
         run: npx cap sync android
+
+      - name: Fix Kotlin duplicate classes
+        run: |
+          cat >> android/build.gradle << 'EOF'
+
+          allprojects {
+              configurations.all {
+                  resolutionStrategy {
+                      force 'org.jetbrains.kotlin:kotlin-stdlib:1.8.22'
+                      force 'org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.8.22'
+                      force 'org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.8.22'
+                  }
+              }
+          }
+          EOF
 
       - name: Build APK
         env:
