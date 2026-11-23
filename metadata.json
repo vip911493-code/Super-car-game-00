@@ -1,0 +1,6 @@
+{
+  "name": "Turbo Drift",
+  "description": "High-speed 3D arcade drift racing circuit with realistic clearcoat cars, procedural Web Audio engine synth, and 3-lap time trials.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
